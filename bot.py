@@ -580,6 +580,13 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif update.message.chat_id == ADMIN_ID:
         pass
 
+async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message.from_user.id != ADMIN_ID:
+        await update.message.reply_text("⛔ Немає доступу.")
+        return
+    users = load_users()
+    await update.message.reply_text(f"📊 <b>Статистика</b>\n\n👥 Користувачів: <b>{len(users)}</b>", parse_mode="HTML")
+
 async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.from_user.id != ADMIN_ID:
         return
@@ -606,6 +613,7 @@ async def main():
     app = ApplicationBuilder().token(token).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("broadcast", broadcast))
+    app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("reply", reply))
     app.add_handler(CallbackQueryHandler(button_handler))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
