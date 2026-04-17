@@ -25,9 +25,9 @@ def load_users() -> list[int]:
 
 SOON = "ℹ️ Інформація з'явиться незабаром. Слідкуйте за оновленнями на <a href=\"https://pk.znu.edu.ua\">pk.znu.edu.ua</a>"
 CONTACTS = (
-    "\n\n📞 Телефон: <b>(061) 228-75-38</b>"
+    "\n\n📍 <b>Приймальна комісія</b>\nвул. Університетська 66-Б (каб. 115)"
     "\n📧 Email: <a href=\"mailto:pk.znu.ua@gmail.com\">pk.znu.ua@gmail.com</a>"
-    "\n📍 Адреса: вул. Університетська 66-Б, каб. 115"
+    "\n🔗 <a href=\"https://beacons.ai/official_znu\">Соцмережі ЗНУ</a>"
 )
 
 FACULTIES = [
@@ -48,9 +48,29 @@ FACULTIES = [
 
 def main_menu():
     keyboard = [
-        [InlineKeyboardButton("Бакалаврат", callback_data="bachelor")],
-        [InlineKeyboardButton("Магістратура", callback_data="master")],
-        [InlineKeyboardButton("Поставити питання", callback_data="question")],
+        [InlineKeyboardButton("🎓 Бакалаврат", callback_data="bachelor")],
+        [InlineKeyboardButton("📚 Магістратура", callback_data="master")],
+        [InlineKeyboardButton("ℹ️ Інше", callback_data="other")],
+        [InlineKeyboardButton("💬 Поставити питання", callback_data="question")],
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
+def other_menu():
+    keyboard = [
+        [InlineKeyboardButton("🏠 Гуртожиток", callback_data="other_dorm")],
+        [InlineKeyboardButton("🏙️ Студентське містечко", callback_data="other_studmisto")],
+        [InlineKeyboardButton("🎭 Позанавчальні активності", callback_data="other_activities")],
+        [InlineKeyboardButton("📞 Контакти", callback_data="other_contacts")],
+        [InlineKeyboardButton("Назад", callback_data="start")],
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
+def activities_menu():
+    keyboard = [
+        [InlineKeyboardButton("🏛️ Студрада", callback_data="act_studrada")],
+        [InlineKeyboardButton("🎨 Творчість", callback_data="act_creativity")],
+        [InlineKeyboardButton("⚽ Спорт", callback_data="act_sport")],
+        [InlineKeyboardButton("Назад", callback_data="other")],
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -374,6 +394,59 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "❓ <b>Питання вступу — Магістратура</b>\n\nОберіть тему:",
             reply_markup=master_questions_menu(), parse_mode="HTML"
         )
+
+    elif data == "other":
+        await query.edit_message_text(
+            "ℹ️ <b>Інше</b>\n\nОберіть розділ:",
+            reply_markup=other_menu(), parse_mode="HTML"
+        )
+
+    elif data == "other_activities":
+        await query.edit_message_text(
+            "🎭 <b>Позанавчальні активності</b>\n\nОберіть розділ:",
+            reply_markup=activities_menu(), parse_mode="HTML"
+        )
+
+    elif data == "act_studrada":
+        await query.edit_message_text(SOON, reply_markup=back_menu("other_activities"), parse_mode="HTML")
+
+    elif data == "act_creativity":
+        await query.edit_message_text(SOON, reply_markup=back_menu("other_activities"), parse_mode="HTML")
+
+    elif data == "act_sport":
+        await query.edit_message_text(SOON, reply_markup=back_menu("other_activities"), parse_mode="HTML")
+
+    elif data == "other_studmisto":
+        keyboard = [
+            [InlineKeyboardButton("🗺️ Карта кампусу", url="https://maps.app.goo.gl/D737mp1sPsNMQA6g6")],
+            [InlineKeyboardButton("🎥 Відеоогляд корпусів", url="https://youtube.com/playlist?list=PL-tYqt5WXMgR8sYkANdk_Gn8getqnBCWP")],
+            [InlineKeyboardButton("Назад", callback_data="other")],
+        ]
+        await query.edit_message_text(
+            "🏙️ <b>Студентське містечко ЗНУ</b>\n\n"
+            "ЗНУ має розгалужений кампус із корпусами в різних частинах міста. "
+            "Скористайтесь картою або перегляньте відеоогляди корпусів:",
+            reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="HTML"
+        )
+
+    elif data == "other_contacts":
+        await query.edit_message_text(
+            "📞 <b>Контакти приймальної комісії ЗНУ</b>"
+            + CONTACTS,
+            reply_markup=back_menu("other"), parse_mode="HTML", disable_web_page_preview=True
+        )
+
+
+    elif data == "other_dorm":
+        await query.edit_message_text(
+            "🏠 <b>Гуртожиток ЗНУ</b>\n\n"
+            "💰 Вартість у 2025 році: <b>8 000 грн/рік</b>\n"
+            "📅 Поселення зазвичай відбувається у <b>серпні</b>\n\n"
+            "ℹ️ Актуальна інформація на 2026 рік з'явиться у соцмережах ЗНУ пізніше.\n\n"
+            "📎 <a href=\"https://sites.znu.edu.ua/liberal_edu/studmisto/156.ukr.html\">Інформація про гуртожитки ЗНУ</a>",
+            reply_markup=back_menu("other"), parse_mode="HTML"
+        )
+
 
     elif data == "question":
         waiting_for_question.add(query.from_user.id)
