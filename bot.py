@@ -408,13 +408,41 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
     elif data == "act_studrada":
-        await query.edit_message_text(SOON, reply_markup=back_menu("other_activities"), parse_mode="HTML")
+        await query.edit_message_text(
+            "🏛️ <b>Студентська рада ЗНУ</b>\n\n"
+            "Студентська рада — це голос студентів університету. Вона захищає права студентів, організовує заходи та допомагає newcomers адаптуватись до університетського життя.\n\n"
+            "🔗 <b>Соцмережі:</b>\n"
+            "• <a href=\"https://www.instagram.com/studradaznu\">Instagram</a>\n"
+            "• <a href=\"https://www.tiktok.com/@studrada_znu\">TikTok</a>\n"
+            "• <a href=\"https://t.me/srznu\">Telegram</a>",
+            reply_markup=back_menu("other_activities"), parse_mode="HTML", disable_web_page_preview=True
+        )
 
     elif data == "act_creativity":
-        await query.edit_message_text(SOON, reply_markup=back_menu("other_activities"), parse_mode="HTML")
+        await query.edit_message_text(
+            "🎨 <b>Центр культури та комунікацій ЗНУ</b>\n\n"
+            "Підтримує творчі ініціативи студентів, організовує культурні заходи та розвиває університетську спільноту.\n\n"
+            "📍 IV корп., вул. Дніпровська 33-А (к. 111/114б)\n"
+            "📧 <a href=\"mailto:culture.znu@gmail.com\">culture.znu@gmail.com</a>\n\n"
+            "🔗 <b>Соцмережі:</b>\n"
+            "• <a href=\"https://www.instagram.com/culture.znu\">Instagram</a>\n"
+            "• <a href=\"https://www.facebook.com/culture.znu\">Facebook</a>\n"
+            "• <a href=\"https://www.youtube.com/channel/UCpEQlTANDEEYmteL3WotRdw\">YouTube</a>",
+            reply_markup=back_menu("other_activities"), parse_mode="HTML", disable_web_page_preview=True
+        )
 
     elif data == "act_sport":
-        await query.edit_message_text(SOON, reply_markup=back_menu("other_activities"), parse_mode="HTML")
+        await query.edit_message_text(
+            "⚽ <b>Спорт у ЗНУ</b>\n\n"
+            "В університеті активно розвивається студентський спорт — від секцій до змагань.\n\n"
+            "🏋️ <b>Секції:</b>\n"
+            "• Атлетична гімнастика\n"
+            "• Волейбол\n"
+            "• Мініфутбол\n"
+            "• Настільний теніс\n\n"
+            "🏆 Щороку проводиться <b>університетська спартакіада</b>, а збірні ЗНУ представляють університет на змаганнях різного рівня.",
+            reply_markup=back_menu("other_activities"), parse_mode="HTML"
+        )
 
     elif data == "other_studmisto":
         keyboard = [
