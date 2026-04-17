@@ -31,19 +31,19 @@ CONTACTS = (
 )
 
 FACULTIES = [
-    ("bio", "Біологічний факультет"),
-    ("econ", "Економічний факультет"),
-    ("math", "Математичний факультет"),
-    ("journ", "Факультет журналістики"),
-    ("fif", "Факультет іноземної філології"),
-    ("history", "Факультет історії та міжнародних відносин"),
-    ("spp", "Факультет соціальної педагогіки та психології"),
-    ("fsu", "Факультет соціології та управління"),
-    ("management", "Факультет менеджменту"),
-    ("fizvosp", "Факультет фізичного виховання, здоров'я та туризму"),
-    ("philology", "Філологічний факультет"),
-    ("law", "Юридичний факультет"),
-    ("institute", "Інженерний інститут"),
+    ("bio", "🌿 Біологічний", "🌿 Біологічний факультет"),
+    ("econ", "📊 Економічний", "📊 Економічний факультет"),
+    ("math", "📐 Математичний", "📐 Математичний факультет"),
+    ("journ", "📰 Журналістики", "📰 Факультет журналістики"),
+    ("fif", "🌍 Іноземної філології", "🌍 Факультет іноземної філології"),
+    ("history", "📜 Історії та міжнар. відносин", "📜 Факультет історії та міжнародних відносин"),
+    ("spp", "🧠 Соц. педагогіки та психології", "🧠 Факультет соціальної педагогіки та психології"),
+    ("fsu", "🏢 Соціології та управління", "🏢 Факультет соціології та управління"),
+    ("management", "💼 Менеджменту", "💼 Факультет менеджменту"),
+    ("fizvosp", "🏃 Фізвиховання, здоров'я та туризму", "🏃 Факультет фізичного виховання, здоров'я та туризму"),
+    ("philology", "📖 Філологічний", "📖 Філологічний факультет"),
+    ("law", "⚖️ Юридичний", "⚖️ Юридичний факультет"),
+    ("institute", "⚙️ Інженерний інститут", "⚙️ Інженерний інститут"),
 ]
 
 def main_menu():
@@ -55,7 +55,7 @@ def main_menu():
     return InlineKeyboardMarkup(keyboard)
 
 def faculties_menu(back):
-    keyboard = [[InlineKeyboardButton(name, callback_data="faculty_" + fid + "_" + back)] for fid, name in FACULTIES]
+    keyboard = [[InlineKeyboardButton(short, callback_data="faculty_" + fid + "_" + back)] for fid, short, full in FACULTIES]
     keyboard.append([InlineKeyboardButton("Назад", callback_data=back)])
     return InlineKeyboardMarkup(keyboard)
 
@@ -116,12 +116,18 @@ def back_menu(destination):
     return InlineKeyboardMarkup([[InlineKeyboardButton("Назад", callback_data=destination)]])
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = "Вітаю! Я бот приймальної комісії ЗНУ.\n\nОберіть розділ:"
+    text = (
+        "Вітаю! Я бот приймальної комісії ЗНУ.\n\n"
+        "Тут ви знайдете:\n"
+        "• інформацію про вступ на бакалаврат і магістратуру\n"
+        "• спеціальності та контакти факультетів\n\n"
+        "Оберіть розділ:"
+    )
     if update.message:
         save_user(update.message.chat_id)
         await update.message.reply_text(text, reply_markup=main_menu(), parse_mode="HTML")
     else:
-        await update.callback_query.edit_message_text(text, reply_markup=main_menu(), parse_mode="HTML")
+        await update.callback_query.edit_message_text(text, reply_markup=main_menu(), parse_mode="HTML", disable_web_page_preview=True)
 
 async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.from_user.id != ADMIN_ID:
@@ -148,7 +154,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if data == "start":
         await query.edit_message_text(
-            "Вітаю! Я бот приймальної комісії ЗНУ.\n\nОберіть розділ:",
+            "Вітаю! Я бот приймальної комісії ЗНУ.\n\n"
+            "Тут ви знайдете:\n"
+            "• інформацію про вступ на бакалаврат і магістратуру\n"
+            "• спеціальності та контакти факультетів\n\n"
+            "Оберіть розділ:",
             reply_markup=main_menu(), parse_mode="HTML"
         )
 
@@ -180,9 +190,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parts = data.split("_", 2)
         fid = parts[1]
         back = parts[2]
-        name = next((n for i, n in FACULTIES if i == fid), "Факультет")
+        name = next((full for i, short, full in FACULTIES if i == fid), "Факультет")
         await query.edit_message_text(
-            f"<b>{name}</b>\n\nОберіть:",
+            f"<b>{name}</b>\n\n📌 Оберіть розділ:",
             reply_markup=faculty_menu(fid, back), parse_mode="HTML"
         )
 
@@ -190,7 +200,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parts = data.split("_")
         fid = parts[1]
         back = parts[3]
-        name = next((n for i, n in FACULTIES if i == fid), "Факультет")
+        name = next((full for i, short, full in FACULTIES if i == fid), "Факультет")
         if fid == "bio" and parts[2] == "about":
             await query.edit_message_text(
                 "<b>🌿 Біологічний факультет</b>\n\n"
