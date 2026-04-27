@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
@@ -9,7 +10,20 @@ logger = logging.getLogger(__name__)
 
 ADMIN_ID = int(os.environ.get("ADMIN_ID", "0"))
 USERS_FILE = "users.txt"
+BUTTON_STATS_FILE = "button_stats.json"
 waiting_for_question: set[int] = set()
+
+def load_button_stats() -> dict:
+    if not os.path.exists(BUTTON_STATS_FILE):
+        return {}
+    with open(BUTTON_STATS_FILE) as f:
+        return json.load(f)
+
+def record_button_click(data: str):
+    stats = load_button_stats()
+    stats[data] = stats.get(data, 0) + 1
+    with open(BUTTON_STATS_FILE, "w") as f:
+        json.dump(stats, f, ensure_ascii=False)
 
 def save_user(chat_id: int):
     ids = load_users()
@@ -171,6 +185,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     data = query.data
+    record_button_click(data)
 
     if data == "start":
         await query.edit_message_text(
@@ -696,7 +711,16 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("⛔ Немає доступу.")
         return
     users = load_users()
-    await update.message.reply_text(f"📊 <b>Статистика</b>\n\n👥 Користувачів: <b>{len(users)}</b>", parse_mode="HTML")
+    button_stats = load_button_stats()
+    text = f"📊 <b>Статистика</b>\n\n👥 Користувачів: <b>{len(users)}</b>\n"
+    if button_stats:
+        sorted_buttons = sorted(button_stats.items(), key=lambda x: x[1], reverse=True)
+        total_clicks = sum(button_stats.values())
+        lines = "\n".join(f"  <code>{k}</code> — {v}" for k, v in sorted_buttons)
+        text += f"\n🔘 <b>Кнопки</b> (всього натискань: {total_clicks}):\n{lines}"
+    else:
+        text += "\n🔘 Кнопок ще не натискали."
+    await update.message.reply_text(text, parse_mode="HTML")
 
 async def reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.from_user.id != ADMIN_ID:
