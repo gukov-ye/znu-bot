@@ -825,6 +825,28 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=back_menu("master_questions"), parse_mode="HTML"
         )
 
+    elif data == "mq_stages":
+        await query.edit_message_text(
+            "📅 <b>Етапи вступної кампанії 2026 — Магістратура</b>\n\n"
+            "🔹 <b>1 липня</b> — реєстрація електронних кабінетів вступників\n\n"
+            "🔹 <b>Реєстрація заяв на вступні випробування у ЗНУ</b> (співбесіда з іноземної мови замість ЄВІ, фаховий іспит):\n"
+            "— бюджет: 1–27 липня (до 18:00)\n"
+            "— контракт: 1 липня – 17 серпня (до 18:00)\n\n"
+            "🔹 <b>Складання вступних випробувань:</b>\n"
+            "— бюджет: 28 липня – 7 серпня\n"
+            "— контракт: 28 липня – 20 серпня\n\n"
+            "🔹 <b>Реєстрація заяв на вступ:</b>\n"
+            "— основна сесія: 7–22 серпня (до 18:00)\n\n"
+            "🔹 <b>Виконання вимог до зарахування:</b>\n"
+            "— бюджет: до 28 серпня (18:00)\n"
+            "— контракт: до 3 вересня (17:00)\n\n"
+            "🔹 <b>Зарахування:</b>\n"
+            "— бюджет: 29 серпня\n"
+            "— контракт: не пізніше 7 вересня\n\n"
+            "❗️ Електронні кабінети працюють до 15 жовтня 2026 включно",
+            reply_markup=back_menu("master_questions"), parse_mode="HTML"
+        )
+
     elif data.startswith("mq_"):
         await query.edit_message_text(SOON, reply_markup=back_menu("master_questions"), parse_mode="HTML")
 
