@@ -185,7 +185,7 @@ FACULTY_SPECS = {
 
 def main_menu():
     keyboard = [
-        [InlineKeyboardButton("🎓 Бакалаврат", callback_data="bachelor")],
+        [InlineKeyboardButton("🎓 Вступ на 1 курс", callback_data="bachelor")],
         [InlineKeyboardButton("📚 Магістратура", callback_data="master")],
         [InlineKeyboardButton("ℹ️ Інше", callback_data="other")],
     ]
@@ -354,8 +354,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "🌍 <b>Liberal Arts and Science</b>\n\n"
                 "Міждисциплінарна освітня програма, яка поєднує гуманітарні, соціальні та природничі науки в єдиному навчальному просторі.\n\n"
                 "Ти сам формуєш свій освітній шлях — обираєш курси з різних галузей знань та розвиваєш критичне мислення, комунікацію та здатність вирішувати складні задачі.\n\n"
-                "📌 Форма навчання: денна (тільки контракт)\n"
-                "🎓 Рівень: бакалаврат\n\n"
+                "📌 Форма навчання: денна (тільки контракт)\n\n"
                 "Соціальні мережі програми:\n"
                 "• <a href=\"https://www.instagram.com/las_znu/\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/las.znu/\">Facebook</a>\n"
