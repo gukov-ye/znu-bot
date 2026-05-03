@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 ADMIN_ID = int(os.environ.get("ADMIN_ID", "0"))
 USERS_FILE = "users.txt"
 BUTTON_STATS_FILE = "button_stats.json"
-waiting_for_question: set[int] = set()
 
 def load_button_stats() -> dict:
     if not os.path.exists(BUTTON_STATS_FILE):
@@ -185,7 +184,6 @@ def main_menu():
         [InlineKeyboardButton("🎓 Бакалаврат", callback_data="bachelor")],
         [InlineKeyboardButton("📚 Магістратура", callback_data="master")],
         [InlineKeyboardButton("ℹ️ Інше", callback_data="other")],
-        [InlineKeyboardButton("💬 Поставити питання", callback_data="question")],
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -617,13 +615,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-    elif data == "question":
-        waiting_for_question.add(query.from_user.id)
-        await query.edit_message_text(
-            "💬 <b>Поставити питання</b>\n\nНапишіть своє питання — менеджер приймальної комісії відповість вам особисто.",
-            reply_markup=back_menu("start"), parse_mode="HTML"
-        )
-
     elif data == "bq_stages":
         await query.edit_message_text(
             "📅 <b>Важливі терміни вступної кампанії 2026</b>\n\n"
@@ -809,28 +800,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(SOON, reply_markup=back_menu("master_questions"), parse_mode="HTML")
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.message.from_user
-    chat_id = update.message.chat_id
-
-    if chat_id in waiting_for_question:
-        waiting_for_question.discard(chat_id)
-        text = update.message.text
-        name = user.full_name
-        username = f"@{user.username}" if user.username else "немає username"
-        await context.bot.send_message(
-            chat_id=ADMIN_ID,
-            text=f"📩 <b>Нове питання</b>\n\n"
-                 f"👤 {name} ({username})\n"
-                 f"🆔 <code>{chat_id}</code>\n\n"
-                 f"❓ {text}\n\n"
-                 f"Відповісти: <code>/reply {chat_id} </code>",
-            parse_mode="HTML"
-        )
-        await update.message.reply_text(
-            "✅ Ваше питання надіслано. Менеджер відповість вам найближчим часом."
-        )
-    elif update.message.chat_id == ADMIN_ID:
-        pass
+    pass
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.from_user.id != ADMIN_ID:
