@@ -349,11 +349,26 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parts = data.split("_", 2)
         fid = parts[1]
         back = parts[2]
-        name = next((full for i, short, full in FACULTIES if i == fid), "Факультет")
-        await query.edit_message_text(
-            f"<b>{name}</b>\n\n📌 Оберіть розділ:",
-            reply_markup=faculty_menu(fid, back), parse_mode="HTML"
-        )
+        if fid == "liberalarts":
+            await query.edit_message_text(
+                "🌍 <b>Liberal Arts and Science</b>\n\n"
+                "Міждисциплінарна освітня програма, яка поєднує гуманітарні, соціальні та природничі науки в єдиному навчальному просторі.\n\n"
+                "Ти сам формуєш свій освітній шлях — обираєш курси з різних галузей знань та розвиваєш критичне мислення, комунікацію та здатність вирішувати складні задачі.\n\n"
+                "📌 Форма навчання: денна (тільки контракт)\n"
+                "🎓 Рівень: бакалаврат\n\n"
+                "Соціальні мережі програми:\n"
+                "• <a href=\"https://www.instagram.com/las_znu/\">Instagram</a>\n"
+                "• <a href=\"https://www.facebook.com/las.znu/\">Facebook</a>\n"
+                "• <a href=\"https://www.tiktok.com/@las_znu\">TikTok</a>\n"
+                "• <a href=\"https://t.me/las_znu\">Telegram</a>",
+                reply_markup=back_menu("spec_" + back), parse_mode="HTML", disable_web_page_preview=True
+            )
+        else:
+            name = next((full for i, short, full in FACULTIES if i == fid), "Факультет")
+            await query.edit_message_text(
+                f"<b>{name}</b>\n\n📌 Оберіть розділ:",
+                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+            )
 
     elif data.startswith("fac_"):
         parts = data.split("_")
