@@ -57,7 +57,7 @@ FACULTIES = [
     ("philology", "📖 Філологічний", "📖 Філологічний факультет"),
     ("law", "⚖️ Юридичний", "⚖️ Юридичний факультет"),
     ("institute", "⚙️ Інженерний інститут", "⚙️ Інженерний інститут"),
-    ("liberalarts", "🎭 Liberal Arts and Science", "🎭 Liberal Arts and Science"),
+    ("liberalarts", "🌀 Liberal Arts and Science", "🌀 Liberal Arts and Science"),
 ]
 
 FACULTY_SPECS = {
@@ -178,7 +178,7 @@ FACULTY_SPECS = {
         "▫️ Фінанси держави та підприємницьких структур — денна (є бюджет), заочна (тільки контракт)"
     ),
     "liberalarts": (
-        "🎭 <b>Liberal Arts and Science</b>\n\n"
+        "🌀 <b>Liberal Arts and Science</b>\n\n"
         "▫️ Liberal Arts and Science — денна (тільки контракт)"
     ),
 }
