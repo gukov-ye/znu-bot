@@ -572,12 +572,6 @@ FACULTY_SPECS = {
     ),
 }
 
-def main_menu():
-    keyboard = [
-        [InlineKeyboardButton("🎓 Вступ на 1 курс", callback_data="bachelor")],
-    ]
-    return InlineKeyboardMarkup(keyboard)
-
 def other_menu():
     keyboard = [
         [InlineKeyboardButton("🏠 Гуртожиток", callback_data="other_dorm")],
@@ -626,7 +620,6 @@ def bachelor_menu():
         [InlineKeyboardButton("Спеціальності ЗНУ", callback_data="spec_bachelor")],
         [InlineKeyboardButton("Все про вступ", callback_data="bach_questions")],
         [InlineKeyboardButton("ℹ️ Інше", callback_data="other")],
-        [InlineKeyboardButton("Назад", callback_data="start")],
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -658,9 +651,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     if update.message:
         save_user(update.message.chat_id)
-        await update.message.reply_text(text, reply_markup=main_menu(), parse_mode="HTML")
+        await update.message.reply_text(text, reply_markup=bachelor_menu(), parse_mode="HTML")
     else:
-        await update.callback_query.edit_message_text(text, reply_markup=main_menu(), parse_mode="HTML", disable_web_page_preview=True)
+        await update.callback_query.edit_message_text(text, reply_markup=bachelor_menu(), parse_mode="HTML", disable_web_page_preview=True)
 
 async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.from_user.id != ADMIN_ID:
@@ -686,7 +679,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = query.data
     record_button_click(data)
 
-    if data == "start":
+    if data in ("start", "bachelor"):
         await query.edit_message_text(
             "👋 Вітаю! Я бот для вступників ЗНУ.\n\n"
             "Тут ти знайдеш:\n"
@@ -694,12 +687,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "- спеціальності та контакти факультетів\n"
             "- корисне про студентське життя в ЗНУ\n\n"
             "Обери розділ:",
-            reply_markup=main_menu(), parse_mode="HTML"
-        )
-
-    elif data == "bachelor":
-        await query.edit_message_text(
-            "🎓 <b>Бакалаврат</b>\n\nОберіть розділ:",
             reply_markup=bachelor_menu(), parse_mode="HTML"
         )
 
