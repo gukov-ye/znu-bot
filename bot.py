@@ -575,8 +575,6 @@ FACULTY_SPECS = {
 def main_menu():
     keyboard = [
         [InlineKeyboardButton("🎓 Вступ на 1 курс", callback_data="bachelor")],
-        [InlineKeyboardButton("📚 Магістратура", callback_data="master")],
-        [InlineKeyboardButton("ℹ️ Інше", callback_data="other")],
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -586,7 +584,7 @@ def other_menu():
         [InlineKeyboardButton("🏙️ Студентське містечко", callback_data="other_studmisto")],
         [InlineKeyboardButton("🎭 Позанавчальні активності", callback_data="other_activities")],
         [InlineKeyboardButton("📞 Контакти", callback_data="other_contacts")],
-        [InlineKeyboardButton("Назад", callback_data="start")],
+        [InlineKeyboardButton("Назад", callback_data="bachelor")],
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -626,15 +624,8 @@ def faculty_menu(fid, back):
 def bachelor_menu():
     keyboard = [
         [InlineKeyboardButton("Спеціальності ЗНУ", callback_data="spec_bachelor")],
-        [InlineKeyboardButton("Питання вступу", callback_data="bach_questions")],
-        [InlineKeyboardButton("Назад", callback_data="start")],
-    ]
-    return InlineKeyboardMarkup(keyboard)
-
-def master_menu():
-    keyboard = [
-        [InlineKeyboardButton("Спеціальності ЗНУ", callback_data="spec_master")],
-        [InlineKeyboardButton("Питання вступу", callback_data="master_questions")],
+        [InlineKeyboardButton("Все про вступ", callback_data="bach_questions")],
+        [InlineKeyboardButton("ℹ️ Інше", callback_data="other")],
         [InlineKeyboardButton("Назад", callback_data="start")],
     ]
     return InlineKeyboardMarkup(keyboard)
@@ -653,21 +644,6 @@ def bach_questions_menu():
     ]
     return InlineKeyboardMarkup(keyboard)
 
-def master_questions_menu():
-    keyboard = [
-        [InlineKeyboardButton("Етапи вступної кампанії", callback_data="mq_stages")],
-        [InlineKeyboardButton("Кабінет вступника", callback_data="mq_cabinet")],
-        [InlineKeyboardButton("ЄВІ", callback_data="mq_evi")],
-        [InlineKeyboardButton("ЄФФВ", callback_data="mq_effv")],
-        [InlineKeyboardButton("Мотиваційний лист", callback_data="mq_motivation")],
-        [InlineKeyboardButton("Творчий конкурс", callback_data="mq_creative")],
-        [InlineKeyboardButton("Пільгові категорії", callback_data="mq_benefits")],
-        [InlineKeyboardButton("Вартість навчання", callback_data="mq_price")],
-        [InlineKeyboardButton("Вступ без іспитів", callback_data="mq_noexam")],
-        [InlineKeyboardButton("Назад", callback_data="master")],
-    ]
-    return InlineKeyboardMarkup(keyboard)
-
 def back_menu(destination):
     return InlineKeyboardMarkup([[InlineKeyboardButton("Назад", callback_data=destination)]])
 
@@ -675,7 +651,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
         "👋 Вітаю! Я бот для вступників ЗНУ.\n\n"
         "Тут ти знайдеш:\n"
-        "- інформацію про вступ на бакалаврат і магістратуру\n"
+        "- інформацію про вступ на бакалаврат\n"
         "- спеціальності та контакти факультетів\n"
         "- корисне про студентське життя в ЗНУ\n\n"
         "Обери розділ:"
@@ -714,7 +690,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(
             "👋 Вітаю! Я бот для вступників ЗНУ.\n\n"
             "Тут ти знайдеш:\n"
-            "- інформацію про вступ на бакалаврат і магістратуру\n"
+            "- інформацію про вступ на бакалаврат\n"
             "- спеціальності та контакти факультетів\n"
             "- корисне про студентське життя в ЗНУ\n\n"
             "Обери розділ:",
@@ -725,12 +701,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(
             "🎓 <b>Бакалаврат</b>\n\nОберіть розділ:",
             reply_markup=bachelor_menu(), parse_mode="HTML"
-        )
-
-    elif data == "master":
-        await query.edit_message_text(
-            "📚 <b>Магістратура</b>\n\nОберіть розділ:",
-            reply_markup=master_menu(), parse_mode="HTML"
         )
 
     elif data == "spec_bachelor":
@@ -775,12 +745,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(
             spec_text,
             reply_markup=back_menu("sector_" + sector_id), parse_mode="HTML", disable_web_page_preview=True
-        )
-
-    elif data == "spec_master":
-        await query.edit_message_text(
-            "📋 <b>Спеціальності ЗНУ — Магістратура</b>\n\nОберіть факультет:",
-            reply_markup=faculties_menu("master"), parse_mode="HTML"
         )
 
     elif data.startswith("faculty_"):
@@ -982,14 +946,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif data == "bach_questions":
         await query.edit_message_text(
-            "❓ <b>Питання вступу — Бакалаврат</b>\n\nОберіть тему:",
+            "❓ <b>Все про вступ</b>\n\nОберіть тему:",
             reply_markup=bach_questions_menu(), parse_mode="HTML"
-        )
-
-    elif data == "master_questions":
-        await query.edit_message_text(
-            "❓ <b>Питання вступу — Магістратура</b>\n\nОберіть тему:",
-            reply_markup=master_questions_menu(), parse_mode="HTML"
         )
 
     elif data == "other":
@@ -1149,13 +1107,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=back_menu("bach_questions"), parse_mode="HTML"
         )
 
-    elif data == "mq_motivation":
-        await query.edit_message_text(
-            "✉️ <b>Мотиваційний лист</b>\n\n"
-            "Мотиваційні листи у 2026 році скасовані та більше не є обов'язковим документом для вступу до закладів вищої освіти України.",
-            reply_markup=back_menu("master_questions"), parse_mode="HTML"
-        )
-
     elif data == "bq_price":
         await query.edit_message_text(
             "💰 <b>Вартість навчання</b>\n\n"
@@ -1217,83 +1168,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif data.startswith("bq_"):
         await query.edit_message_text(SOON, reply_markup=back_menu("bach_questions"), parse_mode="HTML")
-
-    elif data == "mq_evi":
-        await query.edit_message_text(
-            "📜 <b>ЄВІ — Єдиний вступний іспит</b>\n\n"
-            "Для вступу на магістратуру необхідно скласти ЄВІ, який складається з двох частин:\n"
-            "🧠 <b>ТЗНК</b> — тест загальної навчальної компетентності (~75 хвилин, 33 бали)\n"
-            "🌍 <b>Іноземна мова</b> (~45 хвилин, 30 балів)\n\n"
-            "<b>Структура ТЗНК (33 завдання):</b>\n"
-            "— 10 завдань: заповнення пропусків у мікротекстах\n"
-            "— 23 завдання: вибір однієї відповіді\n\n"
-            "<b>Структура іноземної мови (30 завдань):</b>\n"
-            "— 5 завдань: вибір однієї відповіді\n"
-            "— 3 завдання: логічні пари\n"
-            "— 19 завдань: заповнення пропусків у тексті\n\n"
-            "📅 <b>Ключові дати ЄВІ 2026:</b>\n\n"
-            "<b>Основна сесія:</b>\n"
-            "• Реєстрація: 23 квітня – 14 травня\n"
-            "• Тестування: 26 червня – 14 липня\n"
-            "• Результати: до 23 липня\n\n"
-            "<b>Додаткова сесія:</b>\n"
-            "• Реєстрація: 26 – 28 травня\n"
-            "• Тестування: 3 – 21 серпня\n"
-            "• Результати: до 21 серпня\n\n"
-            "📋 <b>Як зареєструватися:</b>\n"
-            "1. Підготувати документи: паспорт/ID, диплом або довідку, РНОКПП, фотокартку, документи для спецумов (за потреби), заповнену заяву-анкету\n"
-            "2. Подати документи до приймальної комісії (особисто або дистанційно)\n"
-            "3. Отримати екзаменаційний лист на email\n"
-            "4. Перевірити кабінет учасника на сайті УЦОЯО\n\n"
-            "ℹ️ Реєстрація на ЄВІ триває з <b>23 квітня</b> до <b>14 травня</b>. Уся актуальна інформація на "
-            "<a href=\"https://pk.znu.edu.ua/4535.ukr.html\">сайті приймальної комісії ЗНУ</a>.",
-            reply_markup=back_menu("master_questions"), parse_mode="HTML"
-        )
-
-    elif data == "mq_effv":
-        await query.edit_message_text(
-            "📜 <b>ЄФВВ — Єдине фахове вступне випробування</b>\n\n"
-            "ЄФВВ — це предметний тест, який складають вступники на магістратуру замість або додатково до ЄВІ, залежно від спеціальності.\n\n"
-            "📚 <b>Предметні тести за спеціальностями ЗНУ:</b>\n"
-            "— Історія мистецтва → Історія та археологія, Графічний дизайн, Перформативні мистецтва\n"
-            "— Мовознавство → Філологія\n"
-            "— Економіка та міжнародна економіка → Економіка та міжнародні економічні відносини\n"
-            "— Політологія та міжнародні відносини → Політологія, Міжнародні відносини\n"
-            "— Психологія та соціологія → Психологія, Соціологія\n"
-            "— Педагогіка та психологія → Психологія\n"
-            "— Облік та фінанси → Облік і оподаткування, Фінанси та банківська справа\n"
-            "— Управління та адміністрування → Менеджмент, Маркетинг, Торгівля\n"
-            "— Право та міжнародне право → Право\n"
-            "— Інформаційні технології → Прикладна математика, Інженерія ПЗ, Комп'ютерні науки\n\n"
-            "🎯 <a href=\"https://zno.osvita.ua/master/\">Попрактикуватись онлайн (тести попередніх років)</a>\n\n"
-            "ℹ️ Детальна інформація на <a href=\"https://pk.znu.edu.ua/4537.ukr.html\">сайті приймальної комісії ЗНУ</a>.",
-            reply_markup=back_menu("master_questions"), parse_mode="HTML"
-        )
-
-    elif data == "mq_stages":
-        await query.edit_message_text(
-            "📅 <b>Етапи вступної кампанії 2026 — Магістратура</b>\n\n"
-            "🔹 <b>1 липня</b> — реєстрація електронних кабінетів вступників\n\n"
-            "🔹 <b>Реєстрація заяв на вступні випробування у ЗНУ</b> (співбесіда з іноземної мови замість ЄВІ, фаховий іспит):\n"
-            "— бюджет: 1–27 липня (до 18:00)\n"
-            "— контракт: 1 липня – 17 серпня (до 18:00)\n\n"
-            "🔹 <b>Складання вступних випробувань:</b>\n"
-            "— бюджет: 28 липня – 7 серпня\n"
-            "— контракт: 28 липня – 20 серпня\n\n"
-            "🔹 <b>Реєстрація заяв на вступ:</b>\n"
-            "— основна сесія: 7–22 серпня (до 18:00)\n\n"
-            "🔹 <b>Виконання вимог до зарахування:</b>\n"
-            "— бюджет: до 28 серпня (18:00)\n"
-            "— контракт: до 3 вересня (17:00)\n\n"
-            "🔹 <b>Зарахування:</b>\n"
-            "— бюджет: 29 серпня\n"
-            "— контракт: не пізніше 7 вересня\n\n"
-            "❗️ Електронні кабінети працюють до 15 жовтня 2026 включно",
-            reply_markup=back_menu("master_questions"), parse_mode="HTML"
-        )
-
-    elif data.startswith("mq_"):
-        await query.edit_message_text(SOON, reply_markup=back_menu("master_questions"), parse_mode="HTML")
 
 async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     pass
