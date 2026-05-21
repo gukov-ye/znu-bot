@@ -617,8 +617,8 @@ def faculty_menu(fid, back):
 
 def bachelor_menu():
     keyboard = [
-        [InlineKeyboardButton("Спеціальності ЗНУ", callback_data="spec_bachelor")],
-        [InlineKeyboardButton("Все про вступ", callback_data="bach_questions")],
+        [InlineKeyboardButton("🎓 Спеціальності ЗНУ", callback_data="spec_bachelor")],
+        [InlineKeyboardButton("📋 Все про вступ", callback_data="bach_questions")],
         [InlineKeyboardButton("ℹ️ Інше", callback_data="other")],
     ]
     return InlineKeyboardMarkup(keyboard)
