@@ -625,14 +625,14 @@ def bachelor_menu():
 
 def bach_questions_menu():
     keyboard = [
-        [InlineKeyboardButton("Етапи вступної кампанії", callback_data="bq_stages")],
-        [InlineKeyboardButton("Кабінет вступника", callback_data="bq_cabinet")],
-        [InlineKeyboardButton("НМТ", callback_data="bq_nmt")],
-        [InlineKeyboardButton("Мотиваційний лист", callback_data="bq_motivation")],
-        [InlineKeyboardButton("Творчий конкурс", callback_data="bq_creative")],
-        [InlineKeyboardButton("Гранти на навчання", callback_data="bq_noexam")],
-        [InlineKeyboardButton("Вартість навчання", callback_data="bq_price")],
-        [InlineKeyboardButton("Пільгові категорії", callback_data="bq_benefits")],
+        [InlineKeyboardButton("📅 Етапи вступної кампанії", callback_data="bq_stages")],
+        [InlineKeyboardButton("💻 Кабінет вступника", callback_data="bq_cabinet")],
+        [InlineKeyboardButton("📝 НМТ", callback_data="bq_nmt")],
+        [InlineKeyboardButton("✉️ Мотиваційний лист", callback_data="bq_motivation")],
+        [InlineKeyboardButton("🎨 Творчий конкурс", callback_data="bq_creative")],
+        [InlineKeyboardButton("🎓 Гранти на навчання", callback_data="bq_noexam")],
+        [InlineKeyboardButton("💰 Вартість навчання", callback_data="bq_price")],
+        [InlineKeyboardButton("🛡️ Пільгові категорії", callback_data="bq_benefits")],
         [InlineKeyboardButton("📄 Документи для вступу", callback_data="bq_docs")],
         [InlineKeyboardButton("Назад", callback_data="bachelor")],
     ]
