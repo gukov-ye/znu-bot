@@ -9,8 +9,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 ADMIN_ID = int(os.environ.get("ADMIN_ID", "0"))
-USERS_FILE = "users.txt"
-BUTTON_STATS_FILE = "button_stats.json"
+DATA_DIR = os.environ.get("DATA_DIR", "/data")
+try:
+    os.makedirs(DATA_DIR, exist_ok=True)
+except OSError:
+    DATA_DIR = "."
+USERS_FILE = os.path.join(DATA_DIR, "users.txt")
+BUTTON_STATS_FILE = os.path.join(DATA_DIR, "button_stats.json")
 
 def load_button_stats() -> dict:
     if not os.path.exists(BUTTON_STATS_FILE):
