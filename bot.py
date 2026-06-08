@@ -1128,7 +1128,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "🏛 Формат: очний (в межах одного дня)\n\n"
             "❗️ Для спеціальності «Фізична культура і спорт» обов'язкова медична довідка про відсутність протипоказань до фізичних навантажень.\n\n"
             "🗓 <a href=\"https://pk.znu.edu.ua/4496.ukr.html\">Розклад творчих конкурсів</a>\n"
-            "📋 <a href=\"https://pk.znu.edu.ua/4500.ukr.html\">Програми творчих конкурсів 2025</a>",
+            "📋 <a href=\"https://pk.znu.edu.ua/4500.ukr.html\">Програми творчих конкурсів 2026</a>",
             reply_markup=back_menu("bach_questions"), parse_mode="HTML", disable_web_page_preview=True
         )
 
