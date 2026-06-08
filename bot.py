@@ -43,7 +43,7 @@ def load_users() -> list[int]:
 
 SOON = "ℹ️ Інформація з'явиться незабаром. Слідкуй за оновленнями на <a href=\"https://pk.znu.edu.ua\">pk.znu.edu.ua</a>"
 CONTACTS = (
-    "\n\n📍 <b>Приймальна комісія</b>\nвул. Університетська 66-Б (каб. 115)"
+    "\n\n📍 <b>Приймальна комісія</b>\nвул. Університетська 66-Б, (каб. 115)"
     "\n📧 Email: <a href=\"mailto:pk.znu.ua@gmail.com\">pk.znu.ua@gmail.com</a>"
     "\n🔗 <a href=\"https://beacons.ai/official_znu\">Соцмережі ЗНУ</a>"
 )
