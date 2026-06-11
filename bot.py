@@ -687,7 +687,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message:
         is_new = save_user(update.message.chat_id)
         if is_new:
-            await notify_admin_new_user(context, update.effective_user)
+            try:
+                await notify_admin_new_user(context, update.effective_user)
+            except Exception:
+                pass
         await update.message.reply_text(text, reply_markup=bachelor_menu(), parse_mode="HTML")
     else:
         await update.callback_query.edit_message_text(text, reply_markup=bachelor_menu(), parse_mode="HTML", disable_web_page_preview=True)
@@ -1043,7 +1046,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=back_menu("other"), parse_mode="HTML", disable_web_page_preview=True
         )
 
-
     elif data == "other_dorm":
         await query.edit_message_text(
             "🏠 <b>Гуртожиток ЗНУ</b>\n\n"
@@ -1051,9 +1053,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "📅 Поселення зазвичай відбувається у <b>серпні</b>\n\n"
             "ℹ️ Актуальна інформація на 2026 рік з'явиться у соцмережах ЗНУ пізніше.\n\n"
             "📎 <a href=\"https://sites.znu.edu.ua/liberal_edu/studmisto/156.ukr.html\">Інформація про гуртожитки ЗНУ</a>",
-            reply_markup=back_menu("other"), parse_mode="HTML"
+            reply_markup=back_menu("other"), parse_mode="HTML", disable_web_page_preview=True
         )
-
 
     elif data == "bq_stages":
         await query.edit_message_text(
@@ -1133,7 +1134,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Вартість навчання на 2026 рік ще не визначена.\n\n"
             "📄 <a href=\"https://pk.znu.edu.ua/2025/vartis-2025/pzso_vart__st__.pdf?v=1749198540\">Ознайомитись з вартістю навчання 2025 року</a>\n\n"
             "ℹ️ Актуальна інформація з'явиться на <a href=\"https://pk.znu.edu.ua\">сайті приймальної комісії</a>.",
-            reply_markup=back_menu("bach_questions"), parse_mode="HTML"
+            reply_markup=back_menu("bach_questions"), parse_mode="HTML", disable_web_page_preview=True
         )
 
     elif data == "bq_creative":
@@ -1169,7 +1170,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "— прийняття рішення про зарахування\n\n"
             "📅 Реєстрація кабінетів стартує <b>1 липня</b>.\n\n"
             "🔗 <a href=\"https://vstup.edbo.gov.ua\">Перейти до кабінету вступника</a>",
-            reply_markup=back_menu("bach_questions"), parse_mode="HTML"
+            reply_markup=back_menu("bach_questions"), parse_mode="HTML", disable_web_page_preview=True
         )
 
     elif data == "bq_noexam":
