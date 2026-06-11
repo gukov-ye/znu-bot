@@ -1,6 +1,8 @@
 import os
 import json
 import logging
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
 import asyncio
@@ -29,11 +31,13 @@ def record_button_click(data: str):
     with open(BUTTON_STATS_FILE, "w") as f:
         json.dump(stats, f, ensure_ascii=False)
 
-def save_user(chat_id: int):
+def save_user(chat_id: int) -> bool:
     ids = load_users()
     if chat_id not in ids:
         with open(USERS_FILE, "a") as f:
             f.write(str(chat_id) + "\n")
+        return True
+    return False
 
 def load_users() -> list[int]:
     if not os.path.exists(USERS_FILE):
@@ -639,12 +643,37 @@ def bach_questions_menu():
         [InlineKeyboardButton("💰 Вартість навчання", callback_data="bq_price")],
         [InlineKeyboardButton("🛡️ Пільгові категорії", callback_data="bq_benefits")],
         [InlineKeyboardButton("📄 Документи для вступу", callback_data="bq_docs")],
+        [InlineKeyboardButton("🏛 Регіональний коефіцієнт", callback_data="bq_regional")],
         [InlineKeyboardButton("Назад", callback_data="bachelor")],
     ]
     return InlineKeyboardMarkup(keyboard)
 
 def back_menu(destination):
     return InlineKeyboardMarkup([[InlineKeyboardButton("Назад", callback_data=destination)]])
+
+async def notify_admin_new_user(context: ContextTypes.DEFAULT_TYPE, user):
+    if not ADMIN_ID:
+        return
+    if user.username:
+        display = f"@{user.username}"
+    else:
+        name_parts = [user.first_name, user.last_name]
+        full_name = " ".join(p for p in name_parts if p)
+        display = full_name or "Без імені"
+    now = datetime.now(ZoneInfo("Europe/Kyiv"))
+    date_str = now.strftime("%d.%m.%Y %H:%M")
+    total = len(load_users())
+    msg = (
+        f"🆕 <b>Новий користувач у боті</b>\n\n"
+        f"👤 {display}\n"
+        f"🆔 ID: {user.id}\n"
+        f"📅 Дата: {date_str}\n"
+        f"👥 Всього користувачів: {total}"
+    )
+    try:
+        await context.bot.send_message(chat_id=ADMIN_ID, text=msg, parse_mode="HTML")
+    except Exception:
+        pass
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
@@ -656,7 +685,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Обери розділ:"
     )
     if update.message:
-        save_user(update.message.chat_id)
+        is_new = save_user(update.message.chat_id)
+        if is_new:
+            await notify_admin_new_user(context, update.effective_user)
         await update.message.reply_text(text, reply_markup=bachelor_menu(), parse_mode="HTML")
     else:
         await update.callback_query.edit_message_text(text, reply_markup=bachelor_menu(), parse_mode="HTML", disable_web_page_preview=True)
@@ -1186,6 +1217,25 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Обов'язкова медична довідка № 086/о про відсутність протипоказань до фізичних навантажень.\n\n"
             "❗️ <i>У разі розбіжності прізвища, імені або по батькові в документах — надати свідоцтво про шлюб, зміну імені тощо.</i>\n\n"
             "🚫 <b>Скріншоти з застосунку «Дія» не приймаються!</b>",
+            reply_markup=back_menu("bach_questions"), parse_mode="HTML"
+        )
+
+    elif data == "bq_regional":
+        await query.edit_message_text(
+            "🏛 <b>Регіональний коефіцієнт</b>\n\n"
+            "Регіональний коефіцієнт (РК) — це множник конкурсного балу, який залежить від <b>місцезнаходження закладу освіти</b>.\n\n"
+            "Його мета — підтримка рівномірного розвитку вишів у регіонах.\n\n"
+            "━━━━━━━━━━━━━━━\n\n"
+            "📌 <b>Для ЗНУ:</b>\n\n"
+            "Регіональний коефіцієнт = <b>1,07</b>\n\n"
+            "Це може додати до <b>10 балів</b> до конкурсного балу.\n\n"
+            "━━━━━━━━━━━━━━━\n\n"
+            "📚 <b>Як це працює?</b>\n\n"
+            "Конкурсний бал автоматично множиться на 1,07 при поданні заяви до ЗНУ.\n\n"
+            "<i>Приклад:</i>\n"
+            "Вступник з конкурсним балом 150 × 1,07 = <b>160,5 балу</b>\n\n"
+            "━━━━━━━━━━━━━━━\n\n"
+            "❗️ Коефіцієнт враховується <b>автоматично</b> при поданні заяви. Жодних додаткових дій не потрібно.",
             reply_markup=back_menu("bach_questions"), parse_mode="HTML"
         )
 
