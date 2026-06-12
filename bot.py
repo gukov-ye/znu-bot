@@ -644,6 +644,7 @@ def bach_questions_menu():
         [InlineKeyboardButton("🛡️ Пільгові категорії", callback_data="bq_benefits")],
         [InlineKeyboardButton("📄 Документи для вступу", callback_data="bq_docs")],
         [InlineKeyboardButton("🏛 Регіональний коефіцієнт", callback_data="bq_regional")],
+        [InlineKeyboardButton("🎯 Спеціальності з особливою підтримкою", callback_data="bq_support")],
         [InlineKeyboardButton("Назад", callback_data="bachelor")],
     ]
     return InlineKeyboardMarkup(keyboard)
@@ -1235,6 +1236,21 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Вступник з конкурсним балом 150 × 1,07 = <b>160,5 балу</b>\n\n"
             "❗️ Коефіцієнт враховується <b>автоматично</b> при поданні заяви. Жодних додаткових дій не потрібно.",
             reply_markup=back_menu("bach_questions"), parse_mode="HTML"
+        )
+
+    elif data == "bq_support":
+        await query.edit_message_text(
+            "🎯 <b>Спеціальності з особливою підтримкою держави</b>\n\n"
+            "Це спеціальності, які держава визначила як <b>пріоритетні</b> та надає для них особливі переваги при вступі.\n\n"
+            "📌 <b>Що це дає вступнику?</b>\n\n"
+            "Якщо ти подаєш заяву на таку спеціальність з <b>пріоритетом 1 або 2</b> — застосовується галузевий коефіцієнт <b>1,02</b>, який додатково збільшує конкурсний бал.\n\n"
+            "📊 <b>У 2026 році:</b>\n\n"
+            "▫️ 45 спеціальностей\n"
+            "▫️ 6 галузей знань\n"
+            "▫️ ГК 1,02 для пріоритетів 1-2\n\n"
+            "❗️ Коефіцієнт враховується <b>автоматично</b> при поданні заяви. Жодних додаткових дій не потрібно.\n\n"
+            "📄 <a href=\"https://pk.znu.edu.ua/2026/pp2026/dodatok_6_do_pp__spets_p__dtrimka.pdf\">Повний перелік таких спеціальностей у ЗНУ — Додаток 6</a>",
+            reply_markup=back_menu("bach_questions"), parse_mode="HTML", disable_web_page_preview=True
         )
 
     elif data.startswith("bq_"):
