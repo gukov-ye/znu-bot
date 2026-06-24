@@ -528,7 +528,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif data == "spec_bachelor":
         await query.edit_message_text(
-            "📋 <b>Спеціальності ЗНУ — Бакалаврат</b>\n\nОберіть факультет:",
+            "📋 <b>Спеціальності ЗНУ — Бакалаврат</b>\n\nОберіть факультет/інститут:",
             reply_markup=faculties_menu("bachelor"), parse_mode="HTML"
         )
 
