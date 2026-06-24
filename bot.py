@@ -53,20 +53,20 @@ CONTACTS = (
 )
 
 FACULTIES = [
-    ("bio", "🌿 Біологічний", "🌿 Біологічний факультет"),
-    ("econ", "📊 Економічний", "📊 Економічний факультет"),
-    ("math", "📐 Математичний", "📐 Математичний факультет"),
-    ("journ", "📰 Журналістики", "📰 Факультет журналістики"),
-    ("fif", "🌍 Іноземної філології", "🌍 Факультет іноземної філології"),
-    ("history", "📜 Історії та міжнар. відносин", "📜 Факультет історії та міжнародних відносин"),
-    ("spp", "🧠 Соц. педагогіки та психології", "🧠 Факультет соціальної педагогіки та психології"),
-    ("fsu", "🏢 Соціології та управління", "🏢 Факультет соціології та управління"),
-    ("management", "💼 Менеджменту", "💼 Факультет менеджменту"),
-    ("fizvosp", "🏃 Фізвиховання, здоров'я та туризму", "🏃 Факультет фізичного виховання, здоров'я та туризму"),
-    ("philology", "📖 Філологічний", "📖 Філологічний факультет"),
-    ("law", "⚖️ Юридичний", "⚖️ Юридичний факультет"),
-    ("institute", "⚙️ Інженерний інститут", "⚙️ Інженерний інститут"),
-    ("liberalarts", "🌀 Liberal Arts and Science", "🌀 Liberal Arts and Science"),
+    ("bio",         "🧬 Біологічний факультет",                          "🧬 Біологічний факультет"),
+    ("econ",        "💰 Економічний факультет",                           "💰 Економічний факультет"),
+    ("hist",        "📜 Факультет історії та міжнар. відносин",           "📜 Факультет історії та міжнародних відносин"),
+    ("math",        "🔢 Математичний факультет",                          "🔢 Математичний факультет"),
+    ("journ",       "📰 Факультет журналістики",                          "📰 Факультет журналістики"),
+    ("foreign",     "🌍 Факультет іноземної філології",                   "🌍 Факультет іноземної філології"),
+    ("manag",       "💼 Факультет менеджменту",                           "💼 Факультет менеджменту"),
+    ("spp",         "🧠 Факультет соц. педагогіки та психол.",            "🧠 Факультет соціальної педагогіки та психології"),
+    ("socio",       "🏛 Факультет соціології та управління",              "🏛 Факультет соціології та управління"),
+    ("phys",        "⚽ Факультет фізвиховання, здоров'я та туризму",     "⚽ Факультет фізичного виховання, здоров'я та туризму"),
+    ("philol",      "📝 Філологічний факультет",                          "📝 Філологічний факультет"),
+    ("law",         "⚖️ Юридичний факультет",                             "⚖️ Юридичний факультет"),
+    ("eng",         "🏗 Інженерний навчально-науковий інститут",          "🏗 Інженерний навчально-науковий інститут ім. Ю.М. Потебні"),
+    ("liberalarts", "🌀 Liberal Arts and Science",                        "🌀 Liberal Arts and Science"),
 ]
 
 
@@ -406,26 +406,6 @@ def activities_menu():
     ]
     return InlineKeyboardMarkup(keyboard)
 
-def spec_faculties_menu():
-    keyboard = [
-        [InlineKeyboardButton("🧬 Біологічний факультет", callback_data="faculty_bio")],
-        [InlineKeyboardButton("💰 Економічний факультет", callback_data="faculty_econ")],
-        [InlineKeyboardButton("📜 Факультет історії та міжнародних відносин", callback_data="faculty_hist")],
-        [InlineKeyboardButton("🔢 Математичний факультет", callback_data="faculty_math")],
-        [InlineKeyboardButton("📰 Факультет журналістики", callback_data="faculty_journ")],
-        [InlineKeyboardButton("🌍 Факультет іноземної філології", callback_data="faculty_foreign")],
-        [InlineKeyboardButton("💼 Факультет менеджменту", callback_data="faculty_manag")],
-        [InlineKeyboardButton("🧠 Факультет соціальної педагогіки та психології", callback_data="faculty_spp")],
-        [InlineKeyboardButton("🏛 Факультет соціології та управління", callback_data="faculty_socio")],
-        [InlineKeyboardButton("⚽ Факультет фізичного виховання, здоров'я та туризму", callback_data="faculty_phys")],
-        [InlineKeyboardButton("📝 Філологічний факультет", callback_data="faculty_philol")],
-        [InlineKeyboardButton("⚖️ Юридичний факультет", callback_data="faculty_law")],
-        [InlineKeyboardButton("🏗 Інженерний навчально-науковий інститут", callback_data="faculty_eng")],
-        [InlineKeyboardButton("🌀 Liberal Arts and Science", callback_data="spec_liberalarts")],
-        [InlineKeyboardButton("Назад", callback_data="bachelor")],
-    ]
-    return InlineKeyboardMarkup(keyboard)
-
 def faculties_menu(back):
     keyboard = [[InlineKeyboardButton(short, callback_data="faculty_" + fid + "_" + back)] for fid, short, full in FACULTIES]
     keyboard.append([InlineKeyboardButton("Назад", callback_data=back)])
@@ -549,7 +529,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif data == "spec_bachelor":
         await query.edit_message_text(
             "📋 <b>Спеціальності ЗНУ — Бакалаврат</b>\n\nОберіть факультет:",
-            reply_markup=spec_faculties_menu(), parse_mode="HTML"
+            reply_markup=faculties_menu("bachelor"), parse_mode="HTML"
         )
 
     elif data == "spec_liberalarts":
@@ -569,13 +549,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif data.startswith("faculty_"):
         parts = data.split("_", 2)
         fid = parts[1]
-        if len(parts) == 2:
-            spec_text = FACULTY_SPECS.get(fid, SOON)
-            await query.edit_message_text(
-                spec_text,
-                reply_markup=back_menu("spec_bachelor"), parse_mode="HTML", disable_web_page_preview=True
-            )
-            return
         back = parts[2]
         if fid == "liberalarts":
             await query.edit_message_text(
@@ -604,7 +577,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         name = next((full for i, short, full in FACULTIES if i == fid), "Факультет")
         if fid == "bio" and parts[2] == "about":
             await query.edit_message_text(
-                "<b>🌿 Біологічний факультет</b>\n\n"
+                "<b>🧬 Біологічний факультет</b>\n\n"
                 "🏛 Корпус 3\n"
                 "📞 Телефон деканату: <b>061-228-75-78</b>\n\n"
                 "<b>Соцмережі:</b>\n"
@@ -612,18 +585,18 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://www.instagram.com/biofacultyznu/\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/biofacultyznu/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/Fs2xAEMXBUA\">Огляд корпусу</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
-        elif fid == "institute" and parts[2] == "about":
+        elif fid == "eng" and parts[2] == "about":
             await query.edit_message_text(
-                "<b>⚙️ Інженерний навчально-науковий інститут ім. Ю.М. Потебні ЗНУ</b>\n\n"
+                "<b>🏗 Інженерний навчально-науковий інститут ім. Ю.М. Потебні ЗНУ</b>\n\n"
                 "🏛 Корпус 10 (просп. Соборний, 224)\n"
                 "📞 Телефон: <b>061-227-12-52</b>\n\n"
                 "<b>Соцмережі:</b>\n"
                 "• <a href=\"https://t.me/senate_enginerka\">Telegram</a>\n"
                 "• <a href=\"https://instagram.com/senate.enginerka\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/IngenerkaZNU/\">Facebook</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
         elif fid == "law" and parts[2] == "about":
             await query.edit_message_text(
@@ -635,11 +608,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://www.instagram.com/sslawznu\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/sslawznu/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/APSe5jPkC7E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
-        elif fid == "philology" and parts[2] == "about":
+        elif fid == "philol" and parts[2] == "about":
             await query.edit_message_text(
-                "<b>📖 Філологічний факультет</b>\n\n"
+                "<b>📝 Філологічний факультет</b>\n\n"
                 "🏛 Корпус 2 (вул. Університетська, 66-Б)\n"
                 "📞 Телефон деканату: <b>061-289-12-94</b>\n\n"
                 "<b>Соцмережі:</b>\n"
@@ -647,11 +620,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://www.instagram.com/philologists_znu\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/philologistsznu/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/dMr51mmi29E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
-        elif fid == "fizvosp" and parts[2] == "about":
+        elif fid == "phys" and parts[2] == "about":
             await query.edit_message_text(
-                "<b>🏃 Факультет фізичного виховання, здоров'я та туризму</b>\n\n"
+                "<b>⚽ Факультет фізичного виховання, здоров'я та туризму</b>\n\n"
                 "🏛 Корпус 4 (вул. Дніпровська, 33-А)\n"
                 "📞 Телефон деканату: <b>061-228-75-54</b>\n\n"
                 "<b>Соцмережі:</b>\n"
@@ -660,9 +633,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://www.facebook.com/groups/1679075008974997/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/cnuX-_pdgKg\">Відеоекскурсія корпусом</a>\n"
                 "🏋️ <a href=\"https://youtu.be/Y8FcyXhQG_8\">Спортивно-оздоровчий комплекс</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
-        elif fid == "management" and parts[2] == "about":
+        elif fid == "manag" and parts[2] == "about":
             await query.edit_message_text(
                 "<b>💼 Факультет менеджменту</b>\n\n"
                 "🏛 Корпус 6 (вул. Університетська, 55-А)\n"
@@ -672,11 +645,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://instagram.com/management.znu\">Instagram</a>\n"
                 "• <a href=\"https://m.facebook.com/104631997668199/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/dMr51mmi29E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
-        elif fid == "fsu" and parts[2] == "about":
+        elif fid == "socio" and parts[2] == "about":
             await query.edit_message_text(
-                "<b>🏢 Факультет соціології та управління</b>\n\n"
+                "<b>🏛 Факультет соціології та управління</b>\n\n"
                 "🏛 Корпус 6 (вул. Університетська, 55-А)\n"
                 "📞 Телефон деканату: <b>061-289-41-04</b>\n\n"
                 "<b>Соцмережі:</b>\n"
@@ -684,7 +657,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://www.instagram.com/fsu_znu/\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/fsu.znu/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/dMr51mmi29E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
         elif fid == "spp" and parts[2] == "about":
             await query.edit_message_text(
@@ -696,9 +669,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://www.instagram.com/znu.spp\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/profile.php?id=100057342643799\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/APSe5jPkC7E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
-        elif fid == "history" and parts[2] == "about":
+        elif fid == "hist" and parts[2] == "about":
             await query.edit_message_text(
                 "<b>📜 Факультет історії та міжнародних відносин</b>\n\n"
                 "🏛 Корпус 5\n"
@@ -708,9 +681,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://www.instagram.com/histfacznu\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/histfacznu/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/APSe5jPkC7E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
-        elif fid == "fif" and parts[2] == "about":
+        elif fid == "foreign" and parts[2] == "about":
             await query.edit_message_text(
                 "<b>🌍 Факультет іноземної філології</b>\n\n"
                 "🏛 Корпус 2\n"
@@ -720,7 +693,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://www.instagram.com/fif_znu_official/\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/FIF.znu.edu.ua/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/dMr51mmi29E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
         elif fid == "journ" and parts[2] == "about":
             await query.edit_message_text(
@@ -732,11 +705,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://instagram.com/znu_zhurfak\">Instagram</a>\n"
                 "• <a href=\"https://m.facebook.com/zhurfak.znu\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/dMr51mmi29E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
         elif fid == "math" and parts[2] == "about":
             await query.edit_message_text(
-                "<b>📐 Математичний факультет</b>\n\n"
+                "<b>🔢 Математичний факультет</b>\n\n"
                 "🏛 Корпус 1\n"
                 "📞 Телефон деканату: <b>061-289-12-60</b>\n\n"
                 "<b>Соцмережі:</b>\n"
@@ -744,11 +717,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://instagram.com/studradamath\">Instagram</a>\n"
                 "• <a href=\"https://www.facebook.com/mathznu/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/8afdX9sFx8E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
         elif fid == "econ" and parts[2] == "about":
             await query.edit_message_text(
-                "<b>📊 Економічний факультет</b>\n\n"
+                "<b>💰 Економічний факультет</b>\n\n"
                 "🏛 Корпус 5\n"
                 "📞 Телефон деканату: <b>097-391-50-82</b>\n\n"
                 "<b>Соцмережі:</b>\n"
@@ -756,18 +729,19 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "• <a href=\"https://instagram.com/ef_tag\">Instagram</a>\n"
                 "• <a href=\"https://m.facebook.com/308017463378246/\">Facebook</a>\n\n"
                 "🎥 <a href=\"https://youtu.be/APSe5jPkC7E\">Відеоекскурсія корпусом</a>",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
         elif parts[2] == "spec":
             spec_text = FACULTY_SPECS.get(fid, f"<b>{name}</b>\n\n{SOON}")
             await query.edit_message_text(
                 spec_text,
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML",
+                disable_web_page_preview=True
             )
         else:
             await query.edit_message_text(
                 f"<b>{name}</b>\n\n{SOON}",
-                reply_markup=faculty_menu(fid, back), parse_mode="HTML"
+                reply_markup=back_menu("faculty_" + fid + "_" + back), parse_mode="HTML"
             )
 
     elif data == "bach_questions":
