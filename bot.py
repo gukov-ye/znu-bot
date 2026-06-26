@@ -772,7 +772,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif data == "act_studrada":
         await query.edit_message_text(
             "🏛️ <b>Студентська рада ЗНУ</b>\n\n"
-            "Студентська рада — це голос студентів університету. Вона захищає права студентів, організовує заходи та допомагає newcomers адаптуватись до університетського життя.\n\n"
+            "Студентська рада — це голос студентів університету. Вона захищає права студентів, організовує заходи та допомагає першокурсникам адаптуватись до університетського життя.\n\n"
             "🔗 <b>Соцмережі:</b>\n"
             "• <a href=\"https://www.instagram.com/studradaznu\">Instagram</a>\n"
             "• <a href=\"https://www.tiktok.com/@studrada_znu\">TikTok</a>\n"
