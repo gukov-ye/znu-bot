@@ -562,12 +562,19 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "🌍 <b>Liberal Arts and Science</b>\n\n"
                 "Міждисциплінарна освітня програма, яка поєднує гуманітарні, соціальні та природничі науки в єдиному навчальному просторі.\n\n"
                 "Ти сам формуєш свій освітній шлях — обираєш курси з різних галузей знань та розвиваєш критичне мислення, комунікацію та здатність вирішувати складні задачі.\n\n"
-                "📌 Форма навчання: денна (тільки контракт)\n\n"
-                "Соціальні мережі програми:\n"
-                "• <a href=\"https://www.instagram.com/las_znu/\">Instagram</a>\n"
-                "• <a href=\"https://www.facebook.com/las.znu/\">Facebook</a>\n"
-                "• <a href=\"https://www.tiktok.com/@las_znu\">TikTok</a>\n"
-                "• <a href=\"https://t.me/las_znu\">Telegram</a>",
+                "📌 <b>Форма навчання:</b> денна (тільки контракт)\n\n"
+                "💰 <b>Вартість навчання:</b> 26 019 грн/рік\n"
+                "Оплату можна розбити посеместрово або помісячно.\n\n"
+                "📝 <b>Сертифікати НМТ для вступу:</b>\n"
+                "▫️ Українська мова\n"
+                "▫️ Математика\n"
+                "▫️ Історія України\n"
+                "▫️ Англійська мова\n\n"
+                "<b>Соціальні мережі програми:</b>\n"
+                "<a href=\"https://www.instagram.com/las_znu/\">Instagram</a> | "
+                "<a href=\"https://www.facebook.com/las.znu/\">Facebook</a> | "
+                "<a href=\"https://www.tiktok.com/@las_znu\">TikTok</a> | "
+                "<a href=\"https://t.me/las_znu\">Telegram</a>",
                 reply_markup=back_menu("spec_" + back), parse_mode="HTML", disable_web_page_preview=True
             )
         else:
