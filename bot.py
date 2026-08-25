@@ -430,6 +430,7 @@ def bachelor_menu():
 def bach_questions_menu():
     keyboard = [
         [InlineKeyboardButton("📅 Етапи вступної кампанії", callback_data="bq_stages")],
+        [InlineKeyboardButton("➕ Додатковий набір", callback_data="bq_extra")],
         [InlineKeyboardButton("💻 Кабінет вступника", callback_data="bq_cabinet")],
         [InlineKeyboardButton("📄 Документи для вступу", callback_data="bq_docs")],
         [InlineKeyboardButton("📝 Коефіцієнти НМТ", callback_data="bq_nmt")],
@@ -865,6 +866,22 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "— контракт: не пізніше 19 серпня\n\n"
             "❗️ Електронні кабінети працюють до 15 жовтня 2026 включно",
             reply_markup=back_menu("bach_questions"), parse_mode="HTML"
+        )
+
+    elif data == "bq_extra":
+        await query.edit_message_text(
+            "➕ <b>Додатковий набір 2026 — Бакалаврат</b>\n\n"
+            "Якщо після основної сесії залишаються вакантні місця ліцензованого обсягу, ЗНУ може оголосити додаткову сесію реєстрації заяв — <b>лише на контракт</b> (за кошти фізичних та/або юридичних осіб).\n\n"
+            "📅 <b>Орієнтовний графік:</b>\n\n"
+            "🔹 <b>Реєстрація заяв на творчі конкурси та співбесіди:</b> 01–18 вересня\n\n"
+            "🔹 <b>Творчі конкурси та співбесіди:</b> 19 вересня\n\n"
+            "🔹 <b>Реєстрація заяв на конкурсний відбір:</b> 01–18 вересня\n\n"
+            "🔹 <b>Рекомендації до зарахування:</b> 21 вересня\n\n"
+            "🔹 <b>Виконання вимог до зарахування:</b> до 24 вересня\n\n"
+            "🔹 <b>Зарахування:</b> 25 вересня\n\n"
+            "❗️ Додатковий набір проводиться лише за наявності вакантних місць — стеж за офіційними оновленнями Приймальної комісії.\n\n"
+            "📄 <a href=\"https://pk.znu.edu.ua/4483.ukr.html\">Нормативні документи — Правила прийому 2026</a>",
+            reply_markup=back_menu("bach_questions"), parse_mode="HTML", disable_web_page_preview=True
         )
 
     elif data == "bq_nmt":
